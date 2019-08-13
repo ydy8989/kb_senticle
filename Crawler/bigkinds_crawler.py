@@ -158,7 +158,7 @@ def get_article(l, f):
 
 
 if __name__ == '__main__':
-    company = input("검색 키워드 입력 (AND, OR, NOT 사용 시 대문자) : ")
+    company = '금 가격'#input("검색 키워드 입력 (AND, OR, NOT 사용 시 대문자) : ")
 
     ban_list = []
 
@@ -173,11 +173,11 @@ if __name__ == '__main__':
         else:
             ban_list.append(keyword)
 
-    start = input('검색 시작일(ex.2018-01-01) : ')
+    start = '2018-01-01'#input('검색 시작일(ex.2018-01-01) : ')
 
-    end = input('검색 종료일(ex.2019-01-01) : ')
+    end = '2019-01-01'#input('검색 종료일(ex.2019-01-01) : ')
 
-    filename = input('저장할 파일 이름 : ')
+    filename = 'gold'#input('저장할 파일 이름 : ')
 
     i = 1
 

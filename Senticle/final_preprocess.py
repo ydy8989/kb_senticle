@@ -76,6 +76,7 @@ else:
                                                   day=df.index[-1].day, hour=15, minute=30)].index, axis=0)
 
 symbol = 'JPY/KRW'  # '#input("%s의 종목코드를 입력하세요 (6자리): "%company)
+print('심볼 :', symbol)
 min_date = df.index.date[0]
 max_date = df.index.date[-1] + datetime.timedelta(days=7)
 stock_df = fdr.DataReader(symbol, min_date, max_date)
@@ -147,3 +148,4 @@ if week_val.lower() == "y":
 else:
     pass
 bin_df.to_csv(company + '_labeled_data.csv', index=True, header=True)
+print('FILE SAVE!! : ' + company + '_labeled_data.csv')

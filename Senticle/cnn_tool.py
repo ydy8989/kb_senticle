@@ -208,6 +208,7 @@ def load_vocab(filename):
     return result
 
 def model_tokenize(contents):
+    print('FILE OPEN !! >>>>>>>> "nouns_gold.data"')
     with open('./nouns_gold.data', 'rb') as f:
     # 포스코 모델
     # with open('./nouns_sk.data', 'rb') as f:
