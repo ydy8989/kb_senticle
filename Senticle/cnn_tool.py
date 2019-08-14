@@ -1,8 +1,9 @@
+import pickle
+import random
+
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-import random
-import pickle
 from soynlp.tokenizer import NounLMatchTokenizer
 
 
@@ -46,7 +47,6 @@ def get_token_id(token, vocab):
         return vocab[token]
     else:
         return 0
-
 def build_input(data, vocab):
 
     def get_onehot(index, size):
@@ -191,7 +191,7 @@ def loading_rdata(data_path):
     corpus = pd.read_csv(data_path)
     corpus = corpus.dropna()
     contents = corpus.text
-    points = corpus.num
+    points = corpus.label
     contents = contents.values.tolist()
     points = points.values.tolist()
 
@@ -208,8 +208,8 @@ def load_vocab(filename):
     return result
 
 def model_tokenize(contents):
-    print('FILE OPEN !! >>>>>>>> "nouns_gold.data"')
-    with open('./nouns_gold.data', 'rb') as f:
+    # print('FILE OPEN !! >>>>>>>> "nouns_gold.data"')
+    with open('./nouns.data', 'rb') as f:
     # 포스코 모델
     # with open('./nouns_sk.data', 'rb') as f:
 
@@ -226,3 +226,4 @@ def isNumber(s):
     return True
   except ValueError:
     return False
+

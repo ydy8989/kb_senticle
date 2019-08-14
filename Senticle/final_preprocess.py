@@ -9,16 +9,12 @@ import datetime
 #                  데이터 정제                      #
 #####################################################
 
-# 데이터 불러오기(포스코.csv 파일 이름 바꿈)
-company = 'gold'  # input("기업명 입력 영어로(ex.SKhynix) :")
-nyun = 1  # input("몇 년치 출력?(최대 4년) : ")
-week_val = 'y'  # input("주말을 뺀 기사만 고려할까요? (y/n) : ")
-# file_path = 'C:/Users/hbee/PycharmProjects/senticle-proj/crawler/'
-df = pd.read_csv(company + '.csv',encoding = 'cp949', error_bad_lines=False, header=None)
-# df.head()
-
-
-# df = df.iloc[:,:2]
+company = input("RawData File Name(.csv) :")
+nyun = input("가장 최근 시점 기준, 몇 년치 데이터 사용? (1년치면, 1 입력) : ")
+week_val = input("y : 주말 기사 제외, n : 주말 기사 포함 (y/n) : ")
+file_path = '../Crawler/' + company + '.csv'
+df = pd.read_csv(file_path, encoding = 'utf-8', error_bad_lines=False, header=None)
+df.head()
 
 df.columns = ['datetime', 'text']
 drop_index = []
@@ -75,7 +71,7 @@ else:
     df = df.drop(df[df.index >= datetime.datetime(year=df.index[-1].year, month=df.index[-1].month,
                                                   day=df.index[-1].day, hour=15, minute=30)].index, axis=0)
 
-symbol = 'JPY/KRW'  # '#input("%s의 종목코드를 입력하세요 (6자리): "%company)
+symbol = input("%s의 종목코드를 입력하세요 (6자리): "%company)
 print('심볼 :', symbol)
 min_date = df.index.date[0]
 max_date = df.index.date[-1] + datetime.timedelta(days=7)
@@ -100,15 +96,15 @@ def updown(x):
 
 
 df_copy = df_copy.set_index('impact_date')
-stock_df['num'] = stock_df['Change'].apply(lambda x: updown(x))
-df_copy['num'] = stock_df['num']
-df_copy['num'] = df_copy['num'].fillna(method='bfill')
-if df_copy.num.isnull().sum() >= 1:
+stock_df['label'] = stock_df['Change'].apply(lambda x: updown(x))
+df_copy['label'] = stock_df['label']
+df_copy['label'] = df_copy['label'].fillna(method='bfill')
+if df_copy.label.isnull().sum() >= 1:
     nextdate = df_copy.index[-1] + datetime.timedelta(1)
     while nextdate not in stock_df.index:
         nextdate = nextdate + datetime.timedelta(1)
-    df_copy.num[-1] = stock_df.loc[nextdate].num
-df_copy['num'] = df_copy['num'].fillna(method='bfill')
+    df_copy.label[-1] = stock_df.loc[nextdate].label
+df_copy['label'] = df_copy['label'].fillna(method='bfill')
 #
 bin_df = pd.DataFrame({'text': []})
 for i in range(len(df_copy)):
@@ -117,7 +113,7 @@ for i in range(len(df_copy)):
     newstring = re.sub('[^가-힣 A-Z\n]', ' ', string_soup.get_text())
     bin_df = bin_df.append(pd.DataFrame({'text': newstring}, index=[df_copy.index[i]]))
 
-bin_df['num'] = df_copy.num.apply(lambda x: int(x))
+bin_df['label'] = df_copy.label.apply(lambda x: int(x))
 bin_df.index = df.index
 
 bin_df = bin_df.reset_index()

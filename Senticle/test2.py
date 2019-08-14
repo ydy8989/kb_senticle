@@ -8,8 +8,8 @@ import numpy as np
 import cnn_tool as tool
 from main import TextCNN
 from lime.lime_text import LimeTextExplainer
-
-data_path = 'preprocessed_gold.csv'
+company = input('RawData File Name? :')
+data_path = 'preprocessed_'+company+'.csv'
 
 doc = pd.read_csv(data_path)
 
@@ -19,12 +19,13 @@ points = []
 for i in range(0, len(doc['text'])):
     if len(str(doc['text'][i])) > 100:
         contents.append(doc['text'][i])
-        points.append(doc['num'][i])
+        points.append(doc['label'][i])
 
 noun_extractor = LRNounExtractor_v2(verbose=True)
 nouns = noun_extractor.train_extract(contents, min_noun_frequency=50)
 
-with open('./nouns_gold.data', 'wb') as f:
+
+with open('./nouns.data', 'wb') as f:
     pickle.dump(nouns, f, pickle.HIGHEST_PROTOCOL)
 
 SEQUENCE_LENGTH = 1400
@@ -35,18 +36,18 @@ def test2():
 
     with tf.Session() as sess:
 
-        vocab = tool.load_vocab('gold_vocab.txt')
+        vocab = tool.load_vocab('dollar__vocab.txt')
 
         CNN = TextCNN(SEQUENCE_LENGTH, NUM_CLASS, len(vocab), 128, [3,4,5], 128)
         saver = tf.train.Saver()
 
-        saver.restore(sess, './runs/1565598160/checkpoints/model-100')
+        saver.restore(sess, './runs/1565770672/checkpoints/model-600')
 
         print('model restored')
 
         input_text = input('평가할 뉴스 입력 : ')
 
-        tokens = tool.model_tokenize(input_text)
+        tokens = tool.model_tokenize(input_text )
 
         sequence = [tool.get_token_id(t, vocab) for t in tokens]
 
@@ -112,7 +113,7 @@ def test2():
 
         exp = explainer.explain_instance(input_text, predict_fn, num_features=6, num_samples=1400)
         key_list = exp.as_list()
-        exp.save_to_file('./oi.html')
+        exp.save_to_file('./dollar.html')
 
 if __name__=='__main__':
     temp = test2()

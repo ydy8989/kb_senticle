@@ -3,16 +3,16 @@ import time
 import datetime
 import tensorflow as tf
 import numpy as np
-import cnn_tool as tool
+import Senticle.cnn_tool as tool
 from tensorflow import flags
-from main import TextCNN
+from Senticle.main import TextCNN
 from tensorflow.contrib import learn
 
 
 def train():
-    # # data loading
-    data_path = 'preprocessed_gold.csv' # csv 파일로 불러오기
-    company = 'gold'#input('회사이름(gold)')
+    company = input('RawData File Name? : ')
+    data_path = 'preprocessed_'+company+'.csv' # csv 파일로 불러오기
+
     # 포스코 모델
     # data_path = 'repro_45.csv' # csv 파일로 불러오기
     contents, points = tool.loading_rdata(data_path) # CSV 읽어오기
@@ -34,7 +34,7 @@ def train():
 
     # divide dataset into train/test set
     x_train, x_test, y_train, y_test = tool.divide(x, y, train_prop = 0.9)
-
+    print(x_test)
 
     # Model Hyperparameters
     flags.DEFINE_integer('embedding_dim', 128, "Dimensionality of embedded vector (default: 128)")
