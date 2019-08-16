@@ -10,6 +10,8 @@ import datetime
     2 : 앞으로 3개월 이내에 금리 하락
 
 주식처럼 매일 매일 변동하지 않기 때문에, 3개월을 기준으로 변동 정도를 3가지 클래스로 분류한다. 
+
+금리 정보 : https://www.bok.or.kr/portal/singl/baseRate/list.do?dataSeCd=01&menuNo=200643
 '''
 
 # 금리 변동 시점(date)과 그 때의 금리(base_rate)
