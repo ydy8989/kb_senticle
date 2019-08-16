@@ -54,7 +54,7 @@ for i in range(len(date)-1):
         df.loc[(datetime.datetime.strptime(date[i + 1], '%Y%m%d') - datetime.timedelta(90))>= df.index,'label'] = base_rate_updown[i]
         df.loc[(datetime.datetime.strptime(date[i], '%Y%m%d'))< df.index,'label'] = 0
 
-#TODO : 위에 레이블링 한번 다시 고쳐야함; ㅅㅂ....
+#TODO : 위에 레이블링 한번 다시 고쳐야함; ㅅㅂ.... 아니다 제대로 된건가...?
 
 
 
