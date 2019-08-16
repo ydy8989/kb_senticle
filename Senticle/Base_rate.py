@@ -18,7 +18,6 @@ import datetime
 date = ['20090109','20090212','20100709','20101116','20110113','20110310','20110610','20120712','20121011','20130509','20140814','20141015','20150312','20150611','20160609','20171130','20181130','20190718']
 base_rate = [2.5,2.0,2.25,2.5,2.75,3.0,3.25,3.0,2.75,2.5,2.25,2.0,1.75,1.5,1.25,1.5,1.75,1.5]
 base_rate_updown = [-1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1, -1, -1, 1, 1, -1]
-
 #
 # df = pd.DataFrame(data = date, columns=['datetime'])
 
@@ -46,8 +45,14 @@ df = df.sort_index()
 for i in range(len(date)-1):
     # date[i]는 금리가 바뀌는 시점.
     # 바뀌는 시점 하루전은 아직 바뀌기 전임.
-    df.loc[(datetime.datetime.strptime(date[i], '%Y%m%d')<=df.index) & (df.index<=datetime.datetime.strptime(date[i+1], '%Y%m%d')),'label'] = base_rate_updown[i]
-    if #date[i+1]-date[i]> 3개월, then date[i+1]-3개월 까지만 base_rate_updown[i]고, date[i] ~ (date[i+1]-3개월) 사이는 유지 : 0레이블
+
+    # date[i+1]-date[i]> 3개월, then date[i+1]-3개월 까지만 base_rate_updown[i]고, date[i] ~ (date[i+1]-3개월) 사이는 유지 : 0레이블
+    if datetime.datetime.strptime(date[i+1], '%Y%m%d') - datetime.datetime.strptime(date[i], '%Y%m%d') < datetime.timedelta(90) # 3개월 미만이면~~~~~
+        df.loc[(datetime.datetime.strptime(date[i], '%Y%m%d')<=df.index) & (df.index<=datetime.datetime.strptime(date[i+1], '%Y%m%d')),'label'] = base_rate_updown[i]
+    else: #3개월을 넘으면~
+        df.loc[(datetime.datetime.strptime(date[i], '%Y%m%d') <= df.index) & (df.index <= datetime.datetime.strptime(date[i + 1], '%Y%m%d')), 'label']
+
+
 
 
 
