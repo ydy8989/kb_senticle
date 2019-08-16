@@ -45,14 +45,16 @@ df = df.sort_index()
 for i in range(len(date)-1):
     # date[i]는 금리가 바뀌는 시점.
     # 바뀌는 시점 하루전은 아직 바뀌기 전임.
-
+    # i = 16
     # date[i+1]-date[i]> 3개월, then date[i+1]-3개월 까지만 base_rate_updown[i]고, date[i] ~ (date[i+1]-3개월) 사이는 유지 : 0레이블
-    if datetime.datetime.strptime(date[i+1], '%Y%m%d') - datetime.datetime.strptime(date[i], '%Y%m%d') < datetime.timedelta(90) # 3개월 미만이면~~~~~
+    if datetime.datetime.strptime(date[i+1], '%Y%m%d') - datetime.datetime.strptime(date[i], '%Y%m%d') < datetime.timedelta(90) :# 3개월 미만이면~~~~~
         df.loc[(datetime.datetime.strptime(date[i], '%Y%m%d')<=df.index) & (df.index<=datetime.datetime.strptime(date[i+1], '%Y%m%d')),'label'] = base_rate_updown[i]
     else: #3개월을 넘으면~
-        df.loc[(datetime.datetime.strptime(date[i], '%Y%m%d') <= df.index) & (df.index <= datetime.datetime.strptime(date[i + 1], '%Y%m%d')), 'label'] =
+        # df.loc[(datetime.datetime.strptime(date[i], '%Y%m%d') < df.index) & (df.index <= datetime.datetime.strptime(date[i + 1], '%Y%m%d')), 'label'] =
+        df.loc[(datetime.datetime.strptime(date[i + 1], '%Y%m%d') - datetime.timedelta(90))>= df.index,'label'] = base_rate_updown[i]
+        df.loc[(datetime.datetime.strptime(date[i], '%Y%m%d'))< df.index,'label'] = 0
 
-
+#TODO : 위에 레이블링 한번 다시 고쳐야함; ㅅㅂ....
 
 
 
