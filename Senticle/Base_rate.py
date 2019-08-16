@@ -44,7 +44,12 @@ df = df.sort_index()
 
 #df에 label 달기.
 for i in range(len(date)-1):
-    df.loc[(datetime.datetime.strptime(date[i], '%Y%m%d')<=df.index) & (df.index<=datetime.datetime.strptime(date[i+1], '%Y%m%d')),'label'] = base_rate[i]
+    # date[i]는 금리가 바뀌는 시점.
+    # 바뀌는 시점 하루전은 아직 바뀌기 전임.
+    df.loc[(datetime.datetime.strptime(date[i], '%Y%m%d')<=df.index) & (df.index<=datetime.datetime.strptime(date[i+1], '%Y%m%d')),'label'] = base_rate_updown[i]
+    if #date[i+1]-date[i]> 3개월, then date[i+1]-3개월 까지만 base_rate_updown[i]고, date[i] ~ (date[i+1]-3개월) 사이는 유지 : 0레이블
+
+
 
 # print(new_df[-245:-220])
 df.label.shift(1) - df.label
