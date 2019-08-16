@@ -50,7 +50,7 @@ for i in range(len(date)-1):
     if datetime.datetime.strptime(date[i+1], '%Y%m%d') - datetime.datetime.strptime(date[i], '%Y%m%d') < datetime.timedelta(90) # 3개월 미만이면~~~~~
         df.loc[(datetime.datetime.strptime(date[i], '%Y%m%d')<=df.index) & (df.index<=datetime.datetime.strptime(date[i+1], '%Y%m%d')),'label'] = base_rate_updown[i]
     else: #3개월을 넘으면~
-        df.loc[(datetime.datetime.strptime(date[i], '%Y%m%d') <= df.index) & (df.index <= datetime.datetime.strptime(date[i + 1], '%Y%m%d')), 'label']
+        df.loc[(datetime.datetime.strptime(date[i], '%Y%m%d') <= df.index) & (df.index <= datetime.datetime.strptime(date[i + 1], '%Y%m%d')), 'label'] =
 
 
 
