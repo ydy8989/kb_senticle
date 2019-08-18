@@ -1,3 +1,5 @@
+#-*- coding:utf-8 -*-
+
 import pandas as pd
 import numpy as np
 import os
@@ -18,11 +20,24 @@ import datetime
 date = ['20090109','20090212','20100709','20101116','20110113','20110310','20110610','20120712','20121011','20130509','20140814','20141015','20150312','20150611','20160609','20171130','20181130','20190718']
 base_rate = [2.5,2.0,2.25,2.5,2.75,3.0,3.25,3.0,2.75,2.5,2.25,2.0,1.75,1.5,1.25,1.5,1.75,1.5]
 base_rate_updown = [-1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1, -1, -1, 1, 1, -1]
-#
-# df = pd.DataFrame(data = date, columns=['datetime'])
+
+#사이사이 3개월 넘는 부분 채우기.
+testtest = []
+for i in range(len(date)-1):
+    if datetime.datetime.strptime(date[i+1], '%Y%m%d')-datetime.datetime.strptime(date[i],  '%Y%m%d')>=datetime.timedelta(90):
+        # (datetime.datetime.strptime(date[1 + 1], '%Y%m%d')-datetime.timedelta(90)).date()
+        testtest.append(i+1)
+        # print(i+1, date[i+1])
+
+for i in testtest:
+    print((datetime.datetime.strptime(date[i], '%Y%m%d') - datetime.timedelta(90)).date())
+
 
 # pd.to_datetime(df['datetime'])
-df = pd.read_csv('./Crawler/dollar_.csv',error_bad_lines=False, names = ['date','text'], header=None)
+df = pd.read_csv('./Senticle/rates2.csv',error_bad_lines=False, header=None, names = ['date','headline'], encoding = 'utf-8')
+df.shape
+df.head(10)
+
 df = df.set_index('date')
 new_df_ind = df.index
 new_df_val = df.text

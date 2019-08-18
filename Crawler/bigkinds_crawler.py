@@ -179,6 +179,7 @@ if __name__ == '__main__':
 
     filename = input('저장할 파일 이름 : ')
 
+
     i = 1
 
     while (switch2):
