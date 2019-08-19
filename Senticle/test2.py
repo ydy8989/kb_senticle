@@ -110,7 +110,7 @@ def test2():
 
             return np.array(predStorage)
 
-        explainer = LimeTextExplainer?(class_names=['상승', '하락'], discretize_continuous = True)
+        explainer = LimeTextExplainer(class_names=['상승', '하락'], discretize_continuous = True)
 
         exp = explainer.explain_instance(input_text, predict_fn, num_features=6, num_samples=1400)
         key_list = exp.as_list()
