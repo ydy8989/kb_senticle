@@ -171,6 +171,17 @@ def make_output(points, threshold):
             results[idx,1] = 1
     return results
 
+def make_output2(points):
+    results = np.zeros((len(points),3))
+    for idx, point in enumerate(points):
+        if point == -1.0:
+            results[idx,0] = 1
+        elif points == 0:
+            results[idx,1] = 1
+        elif points == 1.0:
+            results[idx,2] = 1
+    return results
+
 ####################################################
 # check maxlength function                         #
 ####################################################

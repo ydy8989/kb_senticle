@@ -19,7 +19,7 @@ import datetime
 
 def load_csv(filepath):
     print('Loading........')
-    df = pd.read_csv(filepath, error_bad_lines=False, header=None, names = ['date','headline'], encoding = 'utf-8')
+    df = pd.read_csv(filepath, error_bad_lines=False, header=None, names = ['date','text'], encoding = 'utf-8')
 
     #date to index and to datetime
     df = df.set_index('date')
@@ -63,7 +63,7 @@ def label_df(basic_df):
     return basic_df
 
 if __name__ == '__main__':
-    filepath = './Senticle/rates2.csv'
+    filepath = '../Senticle/rates2.csv'
     basic_df = load_csv(filepath)
     labeled_df = label_df(basic_df)
     labeled_df.to_csv('labeled_rates.csv',index=True, header=True)

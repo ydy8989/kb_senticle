@@ -10,10 +10,10 @@ from tensorflow.contrib import learn
 
 
 def train():
-    company = input('RawData File Name? : ')
-    data_path = 'preprocessed_'+company+'.csv' # csv 파일로 불러오기
-
+    company = 'base_rates'#input('RawData File Name? : ')
+    data_path = '../Senticle/preprocessed_'+company+'.csv' # csv 파일로 불러오기
     # 포스코 모델
+
     # data_path = 'repro_45.csv' # csv 파일로 불러오기
     contents, points = tool.loading_rdata(data_path) # CSV 읽어오기
     vocab_list = tool.cut(contents) # contents 에 모든 기사들을 1개의 리스트에 통합
@@ -30,7 +30,10 @@ def train():
     print('사전단어수 : %s' %(vocab_size))
 
 
-    y = tool.make_output(points, threshold = 0)
+    y = tool.make_output2(points)
+    #[1,0,0] : 하락
+    #[0,1,0] : 유지
+    #[0,0,1] : 상승
 
     # divide dataset into train/test set
     x_train, x_test, y_train, y_test = tool.divide(x, y, train_prop = 0.9)

@@ -5,12 +5,12 @@ from soynlp.noun import LRNounExtractor_v2
 import pickle
 import tensorflow as tf
 import numpy as np
-import cnn_tool as tool
-from main import TextCNN
+import Senticle.cnn_tool as tool
+from Senticle.main import TextCNN
 from lime.lime_text import LimeTextExplainer
 
-company = input('RawData File Name? :')
-data_path = 'preprocessed_'+company+'.csv'
+company = 'base_rates'#input('RawData File Name? :')
+data_path = '../Senticle/preprocessed_'+company+'.csv'
 
 doc = pd.read_csv(data_path)
 
@@ -18,13 +18,12 @@ contents = []
 points = []
 
 for i in range(0, len(doc['text'])):
-    if len(str(doc['text'][i])) > 100:
+    if len(str(doc['text'][i])) > 0:
         contents.append(doc['text'][i])
         points.append(doc['label'][i])
 
 noun_extractor = LRNounExtractor_v2(verbose=True)
-nouns = noun_extractor.train_extract(contents, min_noun_frequency=50)
-
+nouns = noun_extractor.train_extract(contents, min_noun_frequency=20)
 
 with open('./nouns.data', 'wb') as f:
     pickle.dump(nouns, f, pickle.HIGHEST_PROTOCOL)
@@ -42,7 +41,7 @@ def test2():
         CNN = TextCNN(SEQUENCE_LENGTH, NUM_CLASS, len(vocab), 128, [3,4,5], 128)
         saver = tf.train.Saver()
 
-        saver.restore(sess, './runs/1565770672/checkpoints/model-600')
+        saver.restore(sess, './runs/1566391869/checkpoints/model-1200')
 
         print('model restored')
 
@@ -70,51 +69,51 @@ def test2():
         predict = sess.run([CNN.predictions], feed_dict)
 
         result = np.mean(predict)
-
-        if result == 1.0:
-            print('하락')
-        else:
-            print('상승')
-
-        test = sess.run(CNN.final, feed_dict)
-
-        print(test)
-
-        def predict_fn(x):
-            predStorage = []
-            for i in x:
-                tokens = tool.model_tokenize(i)
-                sequence = [tool.get_token_id(t, vocab) for t in tokens]
-                text = []
-                if len(sequence) > 0:
-                    seq_seg = sequence[:SEQUENCE_LENGTH]
-                    sequence = sequence[SEQUENCE_LENGTH:]
-
-                    padding = [1] * (SEQUENCE_LENGTH - len(seq_seg))
-                    seq_seg = seq_seg + padding
-
-                    text.append(seq_seg)
-                else:
-                    padding = [0] * (SEQUENCE_LENGTH)
-                    text.append(padding)
-
-                feed_dict = {
-                    CNN.input_x: text,
-                    CNN.dropout_keep_prob: 1.0
-                }
-
-                scores = sess.run(CNN.final, feed_dict)
-
-
-                predStorage.append(np.squeeze(scores))
-
-            return np.array(predStorage)
-
-        explainer = LimeTextExplainer(class_names=['상승', '하락'], discretize_continuous = True)
-
-        exp = explainer.explain_instance(input_text, predict_fn, num_features=6, num_samples=1400)
-        key_list = exp.as_list()
-        exp.save_to_file('./dollar.html')
+        print(result)
+        # if result == 1.0:
+        #     print('하락')
+        # else:
+        #     print('상승')
+        #
+        # test = sess.run(CNN.final, feed_dict)
+        #
+        # print(test)
+        #
+        # def predict_fn(x):
+        #     predStorage = []
+        #     for i in x:
+        #         tokens = tool.model_tokenize(i)
+        #         sequence = [tool.get_token_id(t, vocab) for t in tokens]
+        #         text = []
+        #         if len(sequence) > 0:
+        #             seq_seg = sequence[:SEQUENCE_LENGTH]
+        #             sequence = sequence[SEQUENCE_LENGTH:]
+        #
+        #             padding = [1] * (SEQUENCE_LENGTH - len(seq_seg))
+        #             seq_seg = seq_seg + padding
+        #
+        #             text.append(seq_seg)
+        #         else:
+        #             padding = [0] * (SEQUENCE_LENGTH)
+        #             text.append(padding)
+        #
+        #         feed_dict = {
+        #             CNN.input_x: text,
+        #             CNN.dropout_keep_prob: 1.0
+        #         }
+        #
+        #         scores = sess.run(CNN.final, feed_dict)
+        #
+        #
+        #         predStorage.append(np.squeeze(scores))
+        #
+        #     return np.array(predStorage)
+        #
+        # explainer = LimeTextExplainer(class_names=['상승', '하락'], discretize_continuous = True)
+        #
+        # exp = explainer.explain_instance(input_text, predict_fn, num_features=6, num_samples=1400)
+        # key_list = exp.as_list()
+        # exp.save_to_file('./dollar.html')
 
 if __name__=='__main__':
     temp = test2()
