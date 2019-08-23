@@ -1,3 +1,4 @@
+
 import pandas as pd
 import Senticle.cnn_tool as tool
 import os
@@ -21,7 +22,7 @@ if os.path.isfile('preprocessed_' + company_name + '.csv') == False:
     print("\n")
 
     noun_extractor = LRNounExtractor_v2(verbose=True)
-    nouns = noun_extractor.train_extract(contents, min_noun_frequency=0)
+    nouns = noun_extractor.train_extract(contents, min_noun_frequency=20)
 
     match_tokenizer = NounLMatchTokenizer(nouns)
 
