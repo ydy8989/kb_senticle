@@ -32,8 +32,8 @@ class TextCNN(object):
         <Variable>
             - W: 각 단어의 임베디드 벡터의 성분을 랜덤하게 할당
         """
-        # with tf.device('/gpu:0'), tf.name_scope("embedding"):
-        with tf.device('/cpu:0'), tf.name_scope("embedding"):
+        with tf.device('/gpu:0'), tf.name_scope("embedding"):
+        # with tf.device('/cpu:0'), tf.name_scope("embedding"):
             self.W = tf.Variable(
                 tf.random_uniform([vocab_size, embedding_size], -1.0, 1.0),
                 name="W")
@@ -105,3 +105,4 @@ class TextCNN(object):
         self.loss = loss
         self.final = final_tensor
         self.accuracy = accuracy
+

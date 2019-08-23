@@ -10,8 +10,8 @@ from tensorflow.contrib import learn
 
 
 def train():
-    company = input('RawData File Name? : ')
-    data_path = 'preprocessed_'+company+'.csv' # csv 파일로 불러오기
+    company = 'base_rates'#input('RawData File Name? : ')
+    data_path = '../preprocessed_'+company+'.csv' # csv 파일로 불러오기
 
     # 포스코 모델
     # data_path = 'repro_45.csv' # csv 파일로 불러오기
@@ -30,11 +30,11 @@ def train():
     print('사전단어수 : %s' %(vocab_size))
 
 
-    y = tool.make_output(points, threshold = 0)
+    # y = tool.make_output(points, threshold = 0) : make_output 는 바이너리 클래시피케이션.
+    y = tool.make_output2(points) #make_output2 는 트리플 클래시피케이션.
 
     # divide dataset into train/test set
     x_train, x_test, y_train, y_test = tool.divide(x, y, train_prop = 0.9)
-    print(x_test)
 
     # Model Hyperparameters
     flags.DEFINE_integer('embedding_dim', 128, "Dimensionality of embedded vector (default: 128)")
@@ -45,7 +45,7 @@ def train():
 
     # Training parameters
     flags.DEFINE_integer("batch_size", 128, "Batch Size (default: 64)")
-    flags.DEFINE_integer("num_epochs", 50, "Number of training epochs (default: 200)")
+    flags.DEFINE_integer("num_epochs", 1, "Number of training epochs (default: 200)")
     flags.DEFINE_integer("evaluate_every", 100, "Evaluate model on dev set after this many steps (default: 100)")
     flags.DEFINE_integer("checkpoint_every", 100, "Save model after this many steps (default: 100)")
     flags.DEFINE_integer("num_checkpoints", 10, "Number of checkpoints to store (default: 5)")
@@ -140,6 +140,7 @@ def train():
                 print("{}: step {}, loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
                 train_summary_writer.add_summary(summaries, step)
 
+   # dev_step(x_test[testpoint:testpoint + 100], y_test[testpoint:testpoint + 100], writer=dev_summary_writer)
 
             def dev_step(x_batch, y_batch, writer=None):
                 """

@@ -5,12 +5,12 @@ from soynlp.noun import LRNounExtractor_v2
 import pickle
 import tensorflow as tf
 import numpy as np
-import cnn_tool as tool
-from main import TextCNN
+import Senticle.cnn_tool as tool
+from Senticle.main import TextCNN
 from lime.lime_text import LimeTextExplainer
 
-company = input('RawData File Name? :')
-data_path = 'preprocessed_'+company+'.csv'
+company = 'base_rates'#input('RawData File Name? :')
+data_path = './preprocessed_'+company+'.csv'
 
 doc = pd.read_csv(data_path)
 
@@ -22,7 +22,7 @@ for i in range(0, len(doc['text'])):
         contents.append(doc['text'][i])
         points.append(doc['label'][i])
 
-noun_extractor = LRNounExtractor_v2(verbose=True)
+noun_extractor = LRNounExtractor_v2(verbose=False)
 nouns = noun_extractor.train_extract(contents, min_noun_frequency=50)
 
 
@@ -36,13 +36,13 @@ NUM_CLASS = 2
 def test2():
 
     with tf.Session() as sess:
-
-        vocab = tool.load_vocab('dollar__vocab.txt')
+        sess = tf.Session()
+        vocab = tool.load_vocab('./Senticle/base_rates_vocab.txt')
 
         CNN = TextCNN(SEQUENCE_LENGTH, NUM_CLASS, len(vocab), 128, [3,4,5], 128)
         saver = tf.train.Saver()
 
-        saver.restore(sess, './runs/1565770672/checkpoints/model-600')
+        saver.restore(sess, './Senticle/runs/1566549858/checkpoints/model-1000')
 
         print('model restored')
 
@@ -110,7 +110,7 @@ def test2():
 
             return np.array(predStorage)
 
-        explainer = LimeTextExplainer?(class_names=['상승', '하락'], discretize_continuous = True)
+        explainer = LimeTextExplainer(class_names=['상승', '하락'], discretize_continuous = True)
 
         exp = explainer.explain_instance(input_text, predict_fn, num_features=6, num_samples=1400)
         key_list = exp.as_list()

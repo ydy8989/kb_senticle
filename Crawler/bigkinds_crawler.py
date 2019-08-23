@@ -4,10 +4,10 @@ import json
 import re
 import csv
 from multiprocessing import Process
-
+# company, ban_list, start, end, i
 def get_url(c, b, s, e, p):
     if len(b) != 0:
-        keyword = c
+        keyword = c # 검색어
         ban = (' OR ').join(b)
         keyword += ' NOT ( ' + ban + ' )'
     else:
@@ -150,7 +150,7 @@ def get_article(l, f):
 
         print(article_text)
 
-        f = open(f + '.csv', 'a', encoding='cp949', newline='') # 우분투 환경 -> UTF-8로 변경.
+        f = open(f + '.csv', 'a', encoding='utf-8', newline='') # 우분투 환경 -> UTF-8로 변경.
         wr = csv.writer(f)
         wr.writerow(article_text)
     else:
@@ -173,7 +173,7 @@ if __name__ == '__main__':
         else:
             ban_list.append(keyword)
 
-    start = '2018-01-01'#input('검색 시작일(ex.2018-01-01) : ')
+    start = input('검색 시작일(ex.2018-01-01) : ')
 
     end = '2019-01-01'#input('검색 종료일(ex.2019-01-01) : ')
 
@@ -182,7 +182,7 @@ if __name__ == '__main__':
     i = 1
 
     while (switch2):
-        test2 = get_url(company, ban_list, start, end, i)
+        test2 = get_url(company, ban_list, start, end, i) # 리스트를 받아옴.
 
         if len(test2) != 0:
             procs = []
