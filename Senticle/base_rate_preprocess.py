@@ -26,7 +26,12 @@ if os.path.isfile('preprocessed_' + company_name + '.csv') == False:
     match_tokenizer = NounLMatchTokenizer(nouns)
 
 noun_contents = []
+<<<<<<< HEAD
 for j in range(len(contents)):
+=======
+for j in range(10):
+    print(contents[j])
+>>>>>>> origin/master
     temp_list = match_tokenizer.tokenize(contents[j])
 
     del_list2 = []
