@@ -21,17 +21,12 @@ if os.path.isfile('preprocessed_' + company_name + '.csv') == False:
     print("\n")
 
     noun_extractor = LRNounExtractor_v2(verbose=True)
-    nouns = noun_extractor.train_extract(contents, min_noun_frequency=20)
+    nouns = noun_extractor.train_extract(contents, min_noun_frequency=0)
 
     match_tokenizer = NounLMatchTokenizer(nouns)
 
 noun_contents = []
-<<<<<<< HEAD
 for j in range(len(contents)):
-=======
-for j in range(10):
-    print(contents[j])
->>>>>>> origin/master
     temp_list = match_tokenizer.tokenize(contents[j])
 
     del_list2 = []
