@@ -67,4 +67,11 @@ print("사전 생성 완료 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
 
 dfdf = pd.DataFrame(noun_contents,  columns=['text'])
 dfdf['label'] = points
+dfdf['text'].drop(dfdf['text'])
+del_list = []
+for i in range(len(dfdf)):
+    print('delete null text..........')
+    if len(dfdf['text'][i])==0:
+        del_list.append(dfdf.index[i])
+dfdf = dfdf.drop(del_list, axis = 0)
 dfdf.to_csv('preprocessed_base_rates.csv', index=True, header=True)
