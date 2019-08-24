@@ -162,24 +162,24 @@ def save_vocab(filename, documents, max_document_length):
 ####################################################
 # make output function                             #
 ####################################################
-def make_output(points, threshold):
+def make_output(points, threshold = 0):
     results = np.zeros((len(points),2))
     for idx, point in enumerate(points):
         if point > threshold:
-            results[idx,0] = 1
+            results[idx,0] = 1#상승
         else:
-            results[idx,1] = 1
+            results[idx,1] = 1#하락
     return results
 
 def make_output2(points):
     results = np.zeros((len(points),3))
     for idx, point in enumerate(points):
         if point == -1.0:
-            results[idx,0] = 1
+            results[idx,2] = 1
         elif points == 0:
             results[idx,1] = 1
         elif points == 1.0:
-            results[idx,2] = 1
+            results[idx,0] = 1
     return results
 
 ####################################################
@@ -196,11 +196,15 @@ def check_maxlength(contents):
 ####################################################
 # loading function                                 #
 ####################################################
-def loading_rdata(data_path):
+def loading_rdata(data_path,drop_zero_label):
     # R에서 title과 contents만 csv로 저장한걸 불러와서 제목과 컨텐츠로 분리
     # write.csv(corpus, data_path, fileEncoding='utf-8', row.names=F)
     corpus = pd.read_csv(data_path)
+
     corpus = corpus.dropna()
+    if drop_zero_label:
+        corpus = corpus.drop(corpus[corpus['label']==0].index,axis = 0)
+
     contents = corpus.text
     points = corpus.label
     contents = contents.values.tolist()

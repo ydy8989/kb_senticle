@@ -7,7 +7,7 @@ from soynlp.noun import LRNounExtractor_v2
 from soynlp.tokenizer import NounLMatchTokenizer
 from soynlp.utils import DoublespaceLineCorpus
 
-company_name = 'rates'#input("RawData File Name? : ")
+company_name = 'article_threeClass'#input("RawData File Name? : ")
 data_path = './labeled_'+company_name+'.csv'# + '_labeled_data.csv'  # csv 파일로 불러오기
 
 # =============================================================================
@@ -26,6 +26,7 @@ if os.path.isfile('preprocessed_' + company_name + '.csv') == False:
 
     match_tokenizer = NounLMatchTokenizer(nouns)
 
+# ==
 noun_contents = []
 for j in range(len(contents)):
     temp_list = match_tokenizer.tokenize(contents[j])
@@ -45,7 +46,7 @@ for j in range(len(contents)):
     temp_list = ' '.join(temp_list)
     noun_contents.append(temp_list)
     # writer.writerow({'text': temp_list, 'num': points[j]})
-    if j % 10 == 0:
+    if j % 100 == 0:
         print("{}개의 기사 중 {}번 기사 불용어처리후 저장완료~ ^오^".format(len(contents), j + 1))
 
 
@@ -67,11 +68,11 @@ print("사전 생성 완료 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
 
 dfdf = pd.DataFrame(noun_contents,  columns=['text'])
 dfdf['label'] = points
-dfdf['text'].drop(dfdf['text'])
+
 del_list = []
 for i in range(len(dfdf)):
     print('delete null text..........')
     if len(dfdf['text'][i])==0:
         del_list.append(dfdf.index[i])
 dfdf = dfdf.drop(del_list, axis = 0)
-dfdf.to_csv('preprocessed_base_rates.csv', index=True, header=True)
+dfdf.to_csv('preprocessed_article_threeClass.csv', index=True, header=True)
