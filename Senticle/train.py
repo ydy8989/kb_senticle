@@ -7,8 +7,8 @@ from tensorflow import flags
 from main import TextCNN
 import os
 def train():
-    company = 'article_threeClass'#input('RawData File Name? : ')
-    data_path = '/home/ydy8989/PycharmProjects/kb_senticle/preprocessed_'+company+'.csv' # csv 파일로 불러오기
+    company = 'article'#input('RawData File Name? : ')
+    data_path = './preprocessed_'+company+'_del.csv' # csv 파일로 불러오기
 
     contents, points = tool.loading_rdata(data_path, drop_zero_label=True, shuffle = True, cutting = True) # CSV 읽어오기 # drop_Zero_label : 0인 레이블 지우기.
 
@@ -38,7 +38,7 @@ def train():
 
     # Training parameters
     flags.DEFINE_integer("batch_size", 128, "Batch Size (default: 64)")
-    flags.DEFINE_integer("num_epochs", 10, "Number of training epochs (default: 200)")
+    flags.DEFINE_integer("num_epochs", 15, "Number of training epochs (default: 200)")
     flags.DEFINE_integer("evaluate_every", 100, "Evaluate model on dev set after this many steps (default: 100)")
     flags.DEFINE_integer("checkpoint_every", 100, "Save model after this many steps (default: 100)")
     flags.DEFINE_integer("num_checkpoints", 10, "Number of checkpoints to store (default: 5)")
@@ -65,8 +65,6 @@ def train():
                           filter_sizes=list(map(int, '3,4,5'.split(","))),
                           num_filters=128,#FLAGS.num_filters,
                           l2_reg_lambda=0.1)#FLAGS.l2_reg_lambda)
-
-            # cnn = CharCNN()
 
             # Define Training procedure
             global_step = tf.Variable(0, name="global_step", trainable=False)
