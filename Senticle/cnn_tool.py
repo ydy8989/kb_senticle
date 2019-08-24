@@ -196,19 +196,53 @@ def check_maxlength(contents):
 ####################################################
 # loading function                                 #
 ####################################################
-def loading_rdata(data_path,drop_zero_label):
+def loading_rdata(data_path, drop_zero_label, shuffle):
     # R에서 title과 contents만 csv로 저장한걸 불러와서 제목과 컨텐츠로 분리
     # write.csv(corpus, data_path, fileEncoding='utf-8', row.names=F)
     corpus = pd.read_csv(data_path)
-
     corpus = corpus.dropna()
+
     if drop_zero_label:
         corpus = corpus.drop(corpus[corpus['label']==0].index,axis = 0)
 
+    uplen = len(corpus[corpus.label == 1])
+    downlen = len(corpus[corpus.label == -1])
+
     contents = corpus.text
     points = corpus.label
+
     contents = contents.values.tolist()
     points = points.values.tolist()
+
+    upcont = []
+    downcont = []
+    uppoint = []
+    downpoint = []
+    for i, val in enumerate(points):
+        if val==1:
+            upcont.append(contents[i])
+            uppoint.append(1)
+        else:
+            downcont.append(contents[i])
+            downpoint.append(-1)
+
+    # up기사와 down기사의 length 통일
+    if uplen - downlen < 0: #down 기사가 더 많을 때
+        downcont = downcont[:uplen]
+        downpoint = downpoint[:uplen]
+    elif uplen - downlen > 0:
+        upcont = upcont[:downlen]
+        uppoint = uppoint[:downlen]
+    else:
+        pass
+    contents = downcont + upcont
+    points = downpoint + uppoint
+
+    if shuffle:
+        # shuffle
+        zip_list = list(zip(contents, points))
+        random.shuffle(zip_list)
+        contents, points = zip(*zip_list)
 
     return contents, points
 
