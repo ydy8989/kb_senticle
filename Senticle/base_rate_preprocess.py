@@ -12,9 +12,14 @@ data_path = './labeled_'+company_name+'.csv'# + '_labeled_data.csv'  # csv 파�
 
 # =============================================================================
 # contents는 각 기사 스트링으로 바꿔 리스트에 넣은거, points는 클래스 0or 1
+    # drop_zeor_label : 레이블 '상승','유지','하락' 중, '유지'에 해당하는 레이블 삭제
+    # shuffle : 데이터 셔플
+    # cutting : 상승, 하락 데이터 갯수 적은 쪽으로 통일.
 # =============================================================================
-contents, points = tool.loading_rdata(data_path)
 
+
+contents, points = tool.loading_rdata(data_path, drop_zero_label=True, shuffle = True)
+len(contents)
 if os.path.isfile('preprocessed_' + company_name + '.csv') == False:
     print("\n")
     print('"preprocessed_' + company_name + '.csv" deos not EXIST!')
@@ -75,4 +80,4 @@ for i in range(len(dfdf)):
     if len(dfdf['text'][i])==0:
         del_list.append(dfdf.index[i])
 dfdf = dfdf.drop(del_list, axis = 0)
-dfdf.to_csv('preprocessed_article_threeClass.csv', index=True, header=True)
+dfdf.to_csv('./preprocessed_article_threeClass.csv', index=True, header=True)

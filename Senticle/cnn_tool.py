@@ -196,7 +196,7 @@ def check_maxlength(contents):
 ####################################################
 # loading function                                 #
 ####################################################
-def loading_rdata(data_path, drop_zero_label, shuffle):
+def loading_rdata(data_path, drop_zero_label, shuffle, cutting):
     # R에서 title과 contents만 csv로 저장한걸 불러와서 제목과 컨텐츠로 분리
     # write.csv(corpus, data_path, fileEncoding='utf-8', row.names=F)
     corpus = pd.read_csv(data_path)
@@ -213,30 +213,30 @@ def loading_rdata(data_path, drop_zero_label, shuffle):
 
     contents = contents.values.tolist()
     points = points.values.tolist()
+    if cutting:
+        upcont = []
+        downcont = []
+        uppoint = []
+        downpoint = []
+        for i, val in enumerate(points):
+            if val==1:
+                upcont.append(contents[i])
+                uppoint.append(1)
+            else:
+                downcont.append(contents[i])
+                downpoint.append(-1)
 
-    upcont = []
-    downcont = []
-    uppoint = []
-    downpoint = []
-    for i, val in enumerate(points):
-        if val==1:
-            upcont.append(contents[i])
-            uppoint.append(1)
+        # up기사와 down기사의 length 통일
+        if uplen - downlen < 0: #down 기사가 더 많을 때
+            downcont = downcont[:uplen]
+            downpoint = downpoint[:uplen]
+        elif uplen - downlen > 0:
+            upcont = upcont[:downlen]
+            uppoint = uppoint[:downlen]
         else:
-            downcont.append(contents[i])
-            downpoint.append(-1)
-
-    # up기사와 down기사의 length 통일
-    if uplen - downlen < 0: #down 기사가 더 많을 때
-        downcont = downcont[:uplen]
-        downpoint = downpoint[:uplen]
-    elif uplen - downlen > 0:
-        upcont = upcont[:downlen]
-        uppoint = uppoint[:downlen]
-    else:
-        pass
-    contents = downcont + upcont
-    points = downpoint + uppoint
+            pass
+        contents = downcont + upcont
+        points = downpoint + uppoint
 
     if shuffle:
         # shuffle

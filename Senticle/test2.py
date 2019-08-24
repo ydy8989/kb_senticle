@@ -10,8 +10,8 @@ import Senticle.cnn_tool as tool
 from Senticle.main import TextCNN
 from lime.lime_text import LimeTextExplainer
 company = 'article_threeClass'  # input('RawData File Name? :')
-if 'nouns.data' not in os.listdir():
 
+if 'nouns.data' not in os.listdir():
     data_path = '/home/ydy8989/PycharmProjects/kb_senticle/preprocessed_' + company + '.csv'
     doc = pd.read_csv(data_path)[['text', 'label']]
     contents = []
@@ -25,11 +25,11 @@ if 'nouns.data' not in os.listdir():
     with open('./nouns.data', 'wb') as f:
         pickle.dump(nouns, f, pickle.HIGHEST_PROTOCOL)
 
-SEQUENCE_LENGTH = 1100
+SEQUENCE_LENGTH = 1400
 NUM_CLASS = 2
 
 
-def test2():
+def test():
 
     with tf.Session() as sess:
 
@@ -38,11 +38,12 @@ def test2():
         CNN = TextCNN(SEQUENCE_LENGTH, NUM_CLASS, len(vocab), 128, [3,4,5], 128)
         saver = tf.train.Saver()
 
-        saver.restore(sess, '/home/ydy8989/PycharmProjects/kb_senticle/Senticle/runs/1566637097/checkpoints/model-1400')
+        saver.restore(sess, '/home/ydy8989/PycharmProjects/kb_senticle/Senticle/runs/1566656240/checkpoints/model-800')
 
         print('model restored')
 
         input_text = input('평가할 뉴스 입력 : ')
+
 
         tokens = tool.model_tokenize(input_text)
 
@@ -107,9 +108,8 @@ def test2():
             return np.array(predStorage)
 
         explainer = LimeTextExplainer(class_names=['상승', '하락'])
-
         exp = explainer.explain_instance(input_text, predict_fn, num_features=6, num_samples=1200)
-        exp.save_to_file('/home/ydy8989/PycharmProjects/kb_senticle/article4.html')
+        exp.save_to_file('/home/ydy8989/PycharmProjects/kb_senticle/article5.html')
 
 if __name__=='__main__':
-    temp = test2()
+    temp = test()

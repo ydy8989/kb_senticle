@@ -62,4 +62,4 @@ if __name__ == '__main__':
     basic_df['text'] = basic_df['text'].apply(lambda x:re.compile('[^ ㄱ-ㅣ가-힣]+').sub('',x))
     labeled_df = label_df(basic_df)
     # len(labeled_df[labeled_df.label==1])
-    labeled_df.to_csv('labeled_article_threeClass.csv',index=True, header=True)
+    labeled_df.to_csv('./labeled_article_threeClass.csv',index=True, header=True)
