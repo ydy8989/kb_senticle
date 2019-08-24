@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from soynlp.tokenizer import NounLMatchTokenizer
 from soynlp.noun import LRNounExtractor_v2
@@ -8,26 +9,21 @@ import numpy as np
 import Senticle.cnn_tool as tool
 from Senticle.main import TextCNN
 from lime.lime_text import LimeTextExplainer
+company = 'article_threeClass'  # input('RawData File Name? :')
+if 'nouns.data' not in os.listdir():
 
-company = 'article_threeClass'#input('RawData File Name? :')
-data_path = '/home/ydy8989/PycharmProjects/kb_senticle/preprocessed_'+company+'.csv'
-
-doc = pd.read_csv(data_path)[['text','label']]
-
-contents = []
-points = []
-
-for i in range(0, len(doc['text'])):
-    if len(str(doc['text'][i])) > 0:
-        contents.append(doc['text'][i])
-        points.append(doc['label'][i])
-
-noun_extractor = LRNounExtractor_v2(verbose=True)
-nouns = noun_extractor.train_extract(contents, min_noun_frequency=0)
-
-
-with open('./nouns.data', 'wb') as f:
-    pickle.dump(nouns, f, pickle.HIGHEST_PROTOCOL)
+    data_path = '/home/ydy8989/PycharmProjects/kb_senticle/preprocessed_' + company + '.csv'
+    doc = pd.read_csv(data_path)[['text', 'label']]
+    contents = []
+    points = []
+    for i in range(0, len(doc['text'])):
+        if len(str(doc['text'][i])) > 0:
+            contents.append(doc['text'][i])
+            points.append(doc['label'][i])
+    noun_extractor = LRNounExtractor_v2(verbose=True)
+    nouns = noun_extractor.train_extract(contents, min_noun_frequency=0)
+    with open('./nouns.data', 'wb') as f:
+        pickle.dump(nouns, f, pickle.HIGHEST_PROTOCOL)
 
 SEQUENCE_LENGTH = 1100
 NUM_CLASS = 2
@@ -113,6 +109,7 @@ def test2():
         explainer = LimeTextExplainer(class_names=['상승', '하락'])
 
         exp = explainer.explain_instance(input_text, predict_fn, num_features=6, num_samples=1200)
-        exp.save_to_file('./article.html')
+        exp.save_to_file('/home/ydy8989/PycharmProjects/kb_senticle/article4.html')
+
 if __name__=='__main__':
     temp = test2()
