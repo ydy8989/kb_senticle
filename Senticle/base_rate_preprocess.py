@@ -18,8 +18,7 @@ data_path = './labeled_'+company_name+'.csv'# + '_labeled_data.csv'  # csv íŒŒì
 # =============================================================================
 
 
-contents, points = tool.loading_rdata(data_path, drop_zero_label=True, shuffle = True)
-len(contents)
+contents, points = tool.loading_rdata(data_path, drop_zero_label=True, shuffle = True, cutting = True)
 if os.path.isfile('preprocessed_' + company_name + '.csv') == False:
     print("\n")
     print('"preprocessed_' + company_name + '.csv" deos not EXIST!')

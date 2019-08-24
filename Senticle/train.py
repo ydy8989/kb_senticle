@@ -10,7 +10,7 @@ def train():
     company = 'article_threeClass'#input('RawData File Name? : ')
     data_path = '/home/ydy8989/PycharmProjects/kb_senticle/preprocessed_'+company+'.csv' # csv 파일로 불러오기
 
-    contents, points = tool.loading_rdata(data_path, drop_zero_label=True, shuffle = True) # CSV 읽어오기 # drop_Zero_label : 0인 레이블 지우기.
+    contents, points = tool.loading_rdata(data_path, drop_zero_label=True, shuffle = True, cutting = True) # CSV 읽어오기 # drop_Zero_label : 0인 레이블 지우기.
 
     vocab_list = tool.cut(contents) # contents 에 모든 기사들을 1개의 리스트에 통합
 
